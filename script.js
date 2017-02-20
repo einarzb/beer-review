@@ -1,26 +1,65 @@
 
-//jquery that onclick invokes addBeer function
-// the function will set var for getting values we need and finally invoke the func.
+var beers = []; //will store the new beers created!
 
-$("button").on("click", function(){
-	
-	 var name =  $(".beer-input").val(); //getting value and assiging it to var
+var arraySort = "normal"; //true flag
+  
+var sortedBeer =[]; //will store the sortes beers
+
+function sortBeers(){
+  if (arraySort === "normal") { //true
+          arraySort = "reverse"; //change flag to false
+          
+          sortedBeer = beers.sort(function(a, b){ //function for sorting object.properties
+          return a.rate - b.rate; 
+          });
+
+    } else {
+
+          arraySort = "normal"; //change flag to true 
+
+          sortedBeer = beers.sort(function(a, b){
+          return b.rate - a.rate; //reverse
+          }); //end function
+
+    } //end else
+};//end major func
+
+
+$("#post").on("click", function(){
+	   var name =  $(".beer-input").val(); //getting value and assiging it to var
      var category = $(".category-input").val(); 
-     var rate = $(".rateBeer").val();
-
+     var rate = $("#rateBeer").val();
      addBeer(name, category, rate); //invoking func
      updateBeers();
 });
 
-//global array
-var beers = []; //will store the new beers created!
-beers.sort(function(a, b){return a-b});
+$("#rated").on("click", function(){
+     $(".beers-list").empty();
+     sortBeers();
+
+     // if ($("#rated").clicked === true) {
+//http://stackoverflow.com/questions/36584844/setting-a-boolean-flag-with-jquery-click
+       for (var i = 0; i < sortedBeer.length; i++) {
+          $(".beers-list").append("<li>" + "<b>" + sortedBeer[i].name + "</b>" + " / "  + sortedBeer[i].category + " / "  +  sortedBeer[i].rate + "</li>");
+        };
+
+     // }else {
+     //  sortedBeer.reverse();}   
+});
+
+// //$('#submit1, #submit2').click(function () {
+//     if (this.id == 'submit1') {
+//         alert('Submit 1 clicked');
+//     }
+//     else if (this.id == 'submit1') {
+//         alert('Submit 2 clicked');
+//     }
+// });
 
 //global function that creates new object and push it onto global array
 var addBeer = function (name, category, rate) {
 
         beers.push({"name": name, "category": category, "rate":rate});
-        beers.sort(function(a, b){return a-b});
         //console.log(beers);
 };
 
@@ -37,7 +76,7 @@ var updateBeers = function () {
       $(".beers-list").empty(); //not sure it's emptying
 
       for (var i = 0; i < beers.length; i++) {
-      	$(".beers-list").append("<li>" + beers[i].name + " / "  + beers[i].category + " / "  +  beers[i].rate + "</li>");
+      	$(".beers-list").append("<li>" + "<b>" + beers[i].name + "</b>" + " / "  + beers[i].category + " / "  +  beers[i].rate + "</li>");
       };
 }
 
